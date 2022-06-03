@@ -1,0 +1,4 @@
+project: PROJECT
+target: commit_graph_fuzzer
+cmds:
+- cmd: /out/commit_graph_fuzzer
