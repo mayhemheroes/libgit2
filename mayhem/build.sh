@@ -15,6 +15,11 @@
 #
 ################################################################################
 
+# Force DWARF 4 so GNU binutils ld (bundled in oss-fuzz base-builder) can
+# parse debug info emitted by clang 22, which defaults to DWARF 5.
+export CFLAGS="$CFLAGS -gdwarf-4"
+export CXXFLAGS="$CXXFLAGS -gdwarf-4"
+
 # build project
 mkdir -p build
 cd build
@@ -24,17 +29,23 @@ cmake .. -DCMAKE_INSTALL_PREFIX="$WORK" \
       -DUSE_HTTPS=OFF \
       -DUSE_SSH=OFF \
       -DUSE_BUNDLED_ZLIB=ON \
+      -DUSE_AUTH_NTLM=OFF \
 
 make -j$(nproc)
 make install
+
+# Compile shared fuzzer utility object (used by download_refs and revparse fuzzers)
+$CC $CFLAGS -c -I./src/util -I../src/libgit2 -I../src/util -I../include \
+    ../fuzzers/fuzzer_utils.c -o "$WORK/fuzzer_utils.o"
+
 for fuzzer in ../fuzzers/*_fuzzer.c
 do
     fuzzer_name=$(basename "${fuzzer%.c}")
 
-    $CC $CFLAGS -c -I./src -I../src/libgit2 -I../src/util -I../include \
+    $CC $CFLAGS -c -I./src/util -I../src/libgit2 -I../src/util -I../include \
         "$fuzzer" -o "$WORK/$fuzzer_name.o"
     $CXX $CXXFLAGS -std=c++17 -o "$OUT/$fuzzer_name" \
-        $LIB_FUZZING_ENGINE "$WORK/$fuzzer_name.o" "$WORK/lib/libgit2.a"
+        $LIB_FUZZING_ENGINE "$WORK/$fuzzer_name.o" "$WORK/fuzzer_utils.o" "$WORK/lib/libgit2.a"
 
     zip -j "$OUT/${fuzzer_name}_seed_corpus.zip" \
         ../fuzzers/corpora/${fuzzer_name%_fuzzer}/*
