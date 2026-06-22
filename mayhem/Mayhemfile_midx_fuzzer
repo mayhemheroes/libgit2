@@ -1,0 +1,7 @@
+project: libgit2
+target: midx_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/midx
+cmds:
+  - cmd: /mayhem/midx_fuzzer
+    libfuzzer: true

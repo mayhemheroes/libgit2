@@ -1,0 +1,7 @@
+project: libgit2
+target: objects_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/objects
+cmds:
+  - cmd: /mayhem/objects_fuzzer
+    libfuzzer: true

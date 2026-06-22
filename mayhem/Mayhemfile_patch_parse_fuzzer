@@ -1,0 +1,7 @@
+project: libgit2
+target: patch_parse_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/patch_parse
+cmds:
+  - cmd: /mayhem/patch_parse_fuzzer
+    libfuzzer: true
