@@ -1,0 +1,7 @@
+project: libgit2
+target: download_refs_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/download_refs
+cmds:
+  - cmd: /mayhem/download_refs_fuzzer
+    libfuzzer: true

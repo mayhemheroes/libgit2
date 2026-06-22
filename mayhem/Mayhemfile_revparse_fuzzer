@@ -1,0 +1,7 @@
+project: libgit2
+target: revparse_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/revparse
+cmds:
+  - cmd: /mayhem/revparse_fuzzer
+    libfuzzer: true

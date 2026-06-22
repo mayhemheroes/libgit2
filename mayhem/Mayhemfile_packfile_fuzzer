@@ -1,0 +1,7 @@
+project: libgit2
+target: packfile_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/packfile
+cmds:
+  - cmd: /mayhem/packfile_fuzzer
+    libfuzzer: true

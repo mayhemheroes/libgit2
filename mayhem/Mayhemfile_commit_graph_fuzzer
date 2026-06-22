@@ -1,0 +1,7 @@
+project: libgit2
+target: commit_graph_fuzzer
+testsuite:
+  - file:///mayhem/fuzzers/corpora/commit_graph
+cmds:
+  - cmd: /mayhem/commit_graph_fuzzer
+    libfuzzer: true
